@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Problem Generator</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+        body {
+            background-color: #444;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #CCC;
+        }
+        .container {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        h1, h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        form input[type="text"] {
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+            width: 100%;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+        form button {
+            padding: 15px 20px;
+            font-family: 'Poppins', sans-serif;
+            background-color: #444;
+            color: #CCC;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #ccc;
+            color: #444;
+        }
+        table {
+            font-family: 'Poppins', sans-serif;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            width: 100%;
+            max-width: 200px;
+        }
+        a {
+            color: #CCC;
+            text-decoration: underline;
+        }
+        a:hover {
+            color: black;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+            form input[type="text"] {
+                width: 100%;
+            }
+            form button {
+                width: 100%;
+            }
+            table, th, td {
+                font-size: 14px;
+            }
+        }
+        .problem {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .highlight {
+            background-color: #444;
+            color: #CCC;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://sta.codeforces.com/s/92205/images/codeforces-logo-with-telegram.png" alt="Codeforces Logo">
+        </div>
+        <h1>Generate Problem Set</h1>
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Generate Problems</button>
+        </form>
+        
+        {% if problem_of_the_day %}
+            <h2>Problem of the Day</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Problem Name</th>
+                        <th>Difficulty</th>
+                        <th>Tags</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="highlight">
+                        <td><a href="{{ problem_of_the_day.url }}" target="_blank">{{ problem_of_the_day.name }}</a></td>
+                        <td>{{ problem_of_the_day.difficulty }}</td>
+                        <td>N/A</td> <!-- No tags for Problem of the Day, adjust as needed -->
+                    </tr>
+                    {% if problems %}
+                        <tr>
+                            <td colspan="3">Generated Problems:</td>
+                        </tr>
+                        {% for problem in problems %}
+                            <tr>
+                                <td><a href="{{ problem.url }}" target="_blank">{{ problem.name }}</a></td>
+                                <td>{{ problem.rating }}</td>
+                                <td>{{ problem.tags|join:", " }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3">No problems found.</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        {% else %}
+            {% if problems %}
+                <h2>Generated Problem Set</h2>
+                <p>Average Difficulty of Solved Problems: {{ avg_difficulty }}</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Problem Name</th>
+                            <th>Difficulty</th>
+                            <th>Tags</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for problem in problems %}
+                            <tr>
+                                <td><a href="{{ problem.url }}" target="_blank">{{ problem.name }}</a></td>
+                                <td>{{ problem.rating }}</td>
+                                <td>{{ problem.tags|join:", " }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3">No problems found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
