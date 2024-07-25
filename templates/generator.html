@@ -117,10 +117,14 @@
             color: #CCC;
             font-weight: bold;
         }
-        footer {
+        .footer_text {
             text-align: center;
             color: #CCC;
             margin-top: 20px;
+        }
+        .footer_text a {
+            color: #CCC;
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -198,7 +202,9 @@
                 </table>
             {% endif %}
         {% endif %}
-        Made by <a href="https://www.linkedin.com/in/bhavik-rohit" target="_blank">Bhavik Rohit</a>
+        <div class='footer_text'>
+            Made by <a href="https://www.linkedin.com/in/bhavik-rohit" target="_blank">Bhavik Rohit</a>
+        </div>
     </div>
 </body>
 </html>
