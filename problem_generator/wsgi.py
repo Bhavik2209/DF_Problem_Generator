@@ -18,7 +18,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'problem_generator.settings')
 
 application = get_wsgi_application()
 
-
+app = application
 
 if __name__ == "__main__":
     execute_from_command_line(sys.argv)
