@@ -31,7 +31,7 @@ def fetch_user_problems(username):
         print("Error fetching solved problems:", response.status_code, response.text)
 
     # Calculate average difficulty if there are solved problems
-    avg_difficulty = sum(difficulties) / len(difficulties) if difficulties else 1500
+    avg_difficulty = sum(difficulties) / len(difficulties) if difficulties else 900
 
     # Fetch all problems
     url_all_problems = 'https://codeforces.com/api/problemset.problems'
@@ -45,7 +45,7 @@ def fetch_user_problems(username):
                 contest_id = problem.get('contestId')
                 index = problem.get('index')
                 rating = problem.get('rating')
-                if contest_id and index and rating and rating > avg_difficulty - 500 and rating < avg_difficulty + 500:
+                if contest_id and index and rating and rating > avg_difficulty - 300 and rating < avg_difficulty + 300:
                     problem_id = f"{contest_id}{index}"
                     if problem_id not in solved_problems:
                         problem['url'] = f'https://codeforces.com/problemset/problem/{contest_id}/{index}'
