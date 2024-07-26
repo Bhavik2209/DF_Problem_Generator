@@ -126,7 +126,7 @@
             color: #CCC;
             text-decoration: underline;
         }
-        p{
+        .error_msg{
             text-align: center;
             
         }
@@ -143,9 +143,11 @@
             {{ form.as_p }}
             <button type="submit">Generate Problems</button>
         </form>
-
+        
         {% if error_message %}
+        <div class='error_msg'>
         <p style="color: red;">{{ error_message }}</p>
+        </div>
         {% endif %}
 
         {% if problem_of_the_day %}
