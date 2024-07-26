@@ -126,6 +126,10 @@
             color: #CCC;
             text-decoration: underline;
         }
+        p{
+            text-align: center;
+            
+        }
     </style>
 </head>
 <body>
@@ -143,7 +147,7 @@
         {% if error_message %}
         <p style="color: red;">{{ error_message }}</p>
         {% endif %}
-        
+
         {% if problem_of_the_day %}
             <h2>Problem of the Day</h2>
             <table>
