@@ -8,15 +8,18 @@ from datetime import date
 def generate_problem_set(request):
     problems = []
     avg_difficulty = None
+    error_message = None
     problem_of_the_day = ProblemOfTheDay.objects.filter(date=date.today()).first()
 
     if request.method == 'POST':
         form = UsernameForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
-            problems, avg_difficulty = fetch_user_problems(username)
-            
-            if problems:
+            problems, avg_difficulty,error_message = fetch_user_problems(username)
+            if error_message:
+                problems = []
+                avg_difficulty = None
+            elif problems:
                 num_problems = min(len(problems), 10)  # Limit to 10 problems or the number of problems available
                 problems = random.sample(problems, num_problems)
             else:
@@ -30,4 +33,5 @@ def generate_problem_set(request):
         'problems': problems,
         'avg_difficulty': avg_difficulty,
         'problem_of_the_day': problem_of_the_day,
+        'error_message': error_message,
     })

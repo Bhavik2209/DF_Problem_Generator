@@ -13,8 +13,11 @@ def fetch_user_problems(username):
     
     if response.status_code == 200:
         try:
-            data = response.json().get('result', [])
-            for submission in data:
+            data = response.json()
+            if 'result' not in data:
+                return None, None, "username NOT FOUND !"
+            submissions = data.get('result', [])
+            for submission in submissions:
                 problem = submission.get('problem', {})
                 contest_id = problem.get('contestId')
                 index = problem.get('index')
@@ -26,9 +29,9 @@ def fetch_user_problems(username):
                     solved_problems.add(problem_id)
                     difficulties.append(rating)
         except ValueError:
-            print("Error decoding JSON response:", response.text)
+            return None, None, "Error decoding JSON response"
     else:
-        print("Error fetching solved problems:", response.status_code, response.text)
+        return None, None, f"Error fetching solved problems: {response.status_code}"
 
     # Calculate average difficulty if there are solved problems
     avg_difficulty = sum(difficulties) / len(difficulties) if difficulties else 900
@@ -45,17 +48,17 @@ def fetch_user_problems(username):
                 contest_id = problem.get('contestId')
                 index = problem.get('index')
                 rating = problem.get('rating')
-                if contest_id and index and rating and rating > avg_difficulty - 300 and rating < avg_difficulty + 300:
+                if contest_id and index and rating and rating >= avg_difficulty - 100 and rating <= avg_difficulty + 200:
                     problem_id = f"{contest_id}{index}"
                     if problem_id not in solved_problems:
                         problem['url'] = f'https://codeforces.com/problemset/problem/{contest_id}/{index}'
                         problems.append(problem)
         except ValueError:
-            print("Error decoding JSON response:", response_all.text)
+            return None, None, "Error decoding JSON response"
     else:
-        print("Error fetching all problems:", response_all.status_code, response_all.text)
+        return None, None, f"Error fetching all problems: {response_all.status_code}"
     
-    return problems, avg_difficulty
+    return problems, avg_difficulty, None
 
 
 

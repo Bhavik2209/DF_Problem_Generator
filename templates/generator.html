@@ -139,6 +139,10 @@
             {{ form.as_p }}
             <button type="submit">Generate Problems</button>
         </form>
+
+        {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
         
         {% if problem_of_the_day %}
             <h2>Problem of the Day</h2>
